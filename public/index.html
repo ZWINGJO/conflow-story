@@ -30,7 +30,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);over
   -webkit-font-smoothing:antialiased;letter-spacing:-.01em}
 
 .viewport{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg)}
-.stage{position:relative;width:1600px;height:900px;flex:none;transform-origin:center center}
+.stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;flex:none;transform-origin:center center}
 .slide{position:absolute;inset:0;padding:100px 120px 110px;display:none}
 .slide.on{display:block}
 .slide.on .r{animation:rise .9s cubic-bezier(.16,1,.3,1) both}
@@ -235,6 +235,62 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
 .lb.tall{justify-content:flex-start;overflow:auto}
 .lb.tall img{max-height:none;max-width:min(900px,94vw)}
 @media (prefers-reduced-motion:reduce){.slide.on .ratio .cust,.slide.on .r,.slide.on .hl{animation:none}.progress i{transition:none}}
+
+/* Lesemodus: Handy und schmale Fenster. Die Folien stehen untereinander und brechen um,
+   statt als verkleinerte 1600x900-Buehne unlesbar zu werden. Schaltet body.read (JS). */
+.readhint{display:none}
+body.read .readhint{display:block;font-size:14px;color:var(--faint);margin:14px 0 0}
+body.read{overflow:auto;height:auto}
+body.read .viewport{position:static;display:block}
+body.read .stage{position:static;width:auto;height:auto;transform:none!important}
+body.read .slide,body.read .slide.cz{display:block!important;position:relative;inset:auto;
+  padding:40px 18px 44px!important;border-bottom:1px solid var(--line)}
+body.read .slide .r,body.read .slide .hl{animation:none!important}
+body.read .progress,body.read .hud,body.read .grid-ov{display:none!important}
+body.read h1,body.read h1.hero{font-size:44px!important;line-height:1.02}
+body.read h2{font-size:31px!important;line-height:1.12}
+body.read h3{font-size:23px!important;line-height:1.18}
+body.read .eyebrow,body.read .kicker{font-size:15px}
+body.read .lead,body.read .hero-sub{font-size:18px!important;max-width:none!important;margin-top:16px}
+body.read .on-in{font-size:15px;margin-top:16px!important;text-align:left!important}
+body.read .center{height:auto!important;text-align:left;align-items:stretch}
+body.read .cols,body.read .duo-pics,body.read .twoshots,body.read .tpl,body.read .pillars,
+body.read .helpgrid,body.read .feats,body.read .stats,body.read .proof,body.read .nums,
+body.read .inputs{grid-template-columns:1fr!important;gap:18px!important;margin-top:22px!important;height:auto!important}
+body.read .cz .head{grid-template-columns:1fr;gap:14px;margin-bottom:16px}
+body.read .cz .legend{min-width:0;max-width:none}
+body.read .cz .legend div{font-size:15px}
+body.read .cz .legend b{width:22px;height:22px;font-size:12px}
+body.read .card,body.read .pillars .card,body.read .helpgrid .card,body.read .proof .card{padding:22px 22px;border-radius:20px}
+body.read .pillars b,body.read .helpgrid b,body.read .way b{font-size:21px}
+body.read .pillars span,body.read .helpgrid span,body.read .way span{font-size:16px}
+body.read .duo-pics .cap{font-size:14px;text-align:left}
+body.read .pic,body.read .shotbox{border-radius:12px}
+body.read .hl{border-width:2px;border-radius:6px;box-shadow:0 0 0 3px rgba(100,181,255,.22)}
+body.read .hl::before{width:18px;height:18px;left:-10px;top:-10px;font-size:11px;line-height:18px}
+body.read .tpl .side,body.read .tpl .side.l{justify-content:flex-start}
+body.read .tpl .core{width:170px;height:170px;justify-self:center}
+body.read .tpl .core b{font-size:26px}
+body.read .pill{font-size:14px;padding:7px 13px}
+body.read .money{flex-wrap:wrap;justify-content:flex-start;gap:12px;margin-top:26px}
+body.read .money .new{font-size:36px}
+body.read .money .body{margin-left:0;max-width:none}
+body.read .said{font-size:14px;overflow-wrap:anywhere}
+body.read .says{font-size:24px}
+body.read .rule svg{width:100%;height:auto}
+body.read .rule .ends{width:100%;gap:12px}
+body.read .rule .q{font-size:20px;padding:16px 24px}
+body.read .rule .ends b{font-size:22px}
+body.read .collage{height:auto;display:flex;flex-direction:column;gap:18px}
+body.read .collage .back,body.read .collage .front{position:static;width:100%}
+body.read .ratio{width:100%;margin-top:28px!important}
+body.read .ratio .legend2{flex-direction:column;gap:8px;font-size:14px}
+body.read .stats b{font-size:44px}
+body.read .num .v,body.read .proof .v{font-size:56px}
+body.read .list{padding:0}
+body.read .row{font-size:17px;gap:12px}
+body.read .doku{font-size:15px}
+body.read .stack[style],body.read .stack{gap:18px}
 </style>
 
 <div class="viewport">
@@ -245,6 +301,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
       <div class="kicker r">conFLOW &middot; What&rsquo;s new</div>
       <h1 class="r hero">One document<br><span class="grad">Pure configuration</span></h1>
       <p class="lead r hero-sub">The BAdI is still there <b>for genuine exceptions</b></p>
+      <p class="readhint">Scroll down through all slides &middot; tap a screenshot to enlarge</p>
       <div class="ratio r" aria-hidden="true">
         <div class="bar"><i class="cust"></i><i class="badi"></i></div>
         <div class="legend2"><span><b class="c"></b>Configuration: object, title, agents, rules, buttons, email, app</span><span><b class="b"></b>BAdI</span></div>
@@ -1000,8 +1057,13 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
     ov.appendChild(o);
   });
 
+  // Lesemodus fuer Handy und schmale Fenster: Folien untereinander statt verkleinerter Buehne
+  function isRead(){return window.innerWidth<1000||window.innerHeight>window.innerWidth}
   function fit(){
-    stage.style.transform='scale('+Math.min(window.innerWidth/1600,window.innerHeight/900)+')';
+    var r=isRead();
+    document.body.classList.toggle('read',r);
+    if(r){document.body.classList.remove('overview');stage.style.transform='';return}
+    stage.style.transform='translate(-50%,-50%) scale('+Math.min(window.innerWidth/1600,window.innerHeight/900)+')';
   }
   function go(n){
     cur=Math.max(0,Math.min(slides.length-1,n));
@@ -1020,6 +1082,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
 
   document.addEventListener('keydown',function(e){
     if(e.metaKey||e.ctrlKey||e.altKey)return;
+    if(document.body.classList.contains('read')&&lb.hidden)return;
     var k=e.key;
     if(!lb.hidden){if(k==='Escape'||k===' '||k==='Enter'){e.preventDefault();closeLb()}return}
     if(k==='ArrowRight'||k==='PageDown'||k===' '){e.preventDefault();go(cur+1)}
@@ -1038,7 +1101,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
   var x0=null;
   document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
   document.addEventListener('touchend',function(e){
-    if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;
+    if(x0===null||document.body.classList.contains('read'))return;var dx=e.changedTouches[0].clientX-x0;
     if(Math.abs(dx)>50)go(cur+(dx<0?1:-1));x0=null;
   });
 
@@ -1046,6 +1109,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
   fit();
   var h=parseInt(location.hash.slice(1),10);
   go(isNaN(h)?0:h-1);
+  if(isRead()&&!isNaN(h)&&slides[h-1]){slides[h-1].scrollIntoView()}
 })();
 </script>
 
