@@ -4,7 +4,7 @@ Static slide deck, English, to click through: what a conFLOW approval can do
 now, how each part is configured, and one real case (NIS2 supplier review)
 from end to end.
 
-**Live:** https://conflow-story.pages.dev
+**Live:** https://story.conflow-help.com (also https://conflow-story.pages.dev)
 (Cloudflare Pages, build output directory `public` · auto-deploy on every push to `main`)
 
 ## Contents
