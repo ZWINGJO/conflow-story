@@ -242,7 +242,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
   <!-- Titel -->
   <section class="slide title" data-title="One document, pure configuration">
     <div class="center" style="height:100%;justify-content:center">
-      <div class="kicker r">conFLOW &middot; What is new</div>
+      <div class="kicker r">conFLOW &middot; What&rsquo;s new</div>
       <h1 class="r hero">One document<br><span class="grad">Pure configuration</span></h1>
       <p class="lead r hero-sub">The BAdI is still there <b>for genuine exceptions</b></p>
       <div class="ratio r" aria-hidden="true">
@@ -359,7 +359,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
       <div class="stack">
         <div class="eyebrow r">Your own document types</div>
         <h2 class="r">Your own template is quick to build</h2>
-        <p class="lead r">For object types that are not shipped, or for fields that are missing. Unlike Flexible Workflow, there is no separate scenario to create&nbsp;&ndash; <b>just a small class.</b></p>
+        <p class="lead r">For object types not provided as standard, or when additional fields are required. Unlike Flexible Workflow, there is no separate scenario to create&nbsp;&ndash; <b>just a small class.</b></p>
       </div>
       <div class="stack r" style="gap:22px">
         <div class="card way"><div class="who">Way 1</div><b>Extend a shipped template</b><span>Append the field to the template structure, inherit from the class, redefine one method. The new field is immediately available for title, rules and email.</span></div>
@@ -437,7 +437,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
       <div class="stack">
         <div class="eyebrow r">The four-eyes principle</div>
         <h2 class="r">Requesters do not approve<br>their own orders</h2>
-        <p class="lead r">One checkbox removes people from the list of agents. That used to need a piece of BAdI; <b>now one entry is enough.</b></p>
+        <p class="lead r">One checkbox removes people from the list of agents. That used to require a BAdI implementation; <b>now one entry is enough.</b></p>
         <p class="on-in r">If a query or correction returns to the same stage, the rule still holds: <b>nobody decides at two different stages.</b> If no eligible agent remains, nobody receives the work item. The exclusion applies to the emails as well.</p>
       </div>
       <div class="card r">
@@ -734,7 +734,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
       <div class="stack">
         <div class="eyebrow r">Four eyes</div>
         <h2 class="r">One person,<br>one stage</h2>
-        <p class="lead r">The initiator of the review is never sent their own task. And anyone who decided at stage 1 is excluded from stage 2&nbsp;&ndash; <b>even if they are a named agent there.</b></p>
+        <p class="lead r">The initiator of the review never receives their own task. And anyone who decided at stage 1 is excluded from stage 2&nbsp;&ndash; <b>even if they are a named agent there.</b></p>
         <p class="on-in r">Two rows in the agent table, no code: <b>WF_INITIATOR</b> and <b>WF_APPROVERS</b>, both marked as excluded.</p>
       </div>
       <div>
@@ -806,7 +806,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
       <h2 class="r">Silence is the worst outcome</h2>
     </div>
     <div class="duo-pics r" style="margin-top:40px">
-      <div><figure class="pic r" style=""><img src="screenshots/nis2/G2-mail-abbruch.png" alt="Email: NIS2 review could not be started"></figure><div class="cap">The initiator is notified</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/G2-mail-abbruch.png" alt="Email: NIS2 review could not be started"></figure><div class="cap">Here: the initiator is notified</div></div>
       <div><figure class="pic r" style=""><img src="screenshots/nis2/G2-slg1.png" alt="Application log with the reason: partner is being processed"></figure><div class="cap">The log records exactly what went wrong</div></div>
     </div>
     <p class="on-in r" style="text-align:center;margin-top:30px">A locked business partner, an invalid key, a missing result: the workflow ends in a <b>named end status</b>, writes the reason to the application log and notifies the people responsible.</p>
@@ -900,7 +900,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
   <section class="slide cz" data-title="The text itself">
 
     <div class="head r">
-      <div><div class="eyebrow">This is how it is set up</div><h3>A standard text with placeholders&nbsp;&ndash; no template engine, no code to transport</h3></div>
+      <div><div class="eyebrow">This is how it is set up</div><h3>A standard text with placeholders&nbsp;&ndash; no template engine, no code transport</h3></div>
       <div class="legend">
         <div><b>1</b>Document fields, filled in when the email is sent</div>
         <div><b>2</b>Paragraphs are plain HTML, so the email reads like an email</div>
@@ -927,7 +927,7 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
         <div class="card"><div class="who">Developed for this case</div><b>The input panel</b><span>Result and note in the work item, plus a check that blocks approval without a result &ndash; or without a note when the result is critical. One class, used by SAP GUI, Fiori and any API call alike.</span></div>
         <div class="card"><div class="who">Developed for this case</div><b>The write-back</b><span>One background step that writes the result to the business partner. Fifteen lines of business logic; the rest is robust error handling.</span></div>
       </div>
-      <p class="on-in r" style="margin-top:34px">Configurable input fields at the work item are <b>the next planned product feature</b>. Then even this case is pure configuration.</p>
+      <p class="on-in r" style="margin-top:34px">Configurable input fields in the work item are <b>the next planned product feature</b>. Then even this case is pure configuration.</p>
     </div>
   </section>
 
