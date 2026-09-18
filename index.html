@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>conFLOW · Approvals you configure</title>
+<meta name="description" content="conFLOW to click through: what an approval can do now, how it is configured, and one real case from end to end.">
+<style>
+/* Bewusst nur dunkel: das Deck wird vorgeführt. */
+:root{
+  color-scheme:dark;
+  --bg:#000;
+  --card:#161618;
+  --card-2:#232326;
+  --line:#2c2c2f;
+  --ink:#f5f5f7;
+  --muted:#8e8e93;
+  --faint:#636366;
+  --blue:#64b5ff;
+  --green:#30d158;
+  --red:#ff453a;
+  --amber:#ffb340;
+  --flow:linear-gradient(180deg,#ffffff 0%,#b8b8bd 100%);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI Variable Display","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);overflow:hidden;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+
+.viewport{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg)}
+.stage{position:relative;width:1600px;height:900px;flex:none;transform-origin:center center}
+.slide{position:absolute;inset:0;padding:100px 120px 110px;display:none}
+.slide.on{display:block}
+.slide.on .r{animation:rise .9s cubic-bezier(.16,1,.3,1) both}
+.slide.on .r:nth-child(2){animation-delay:.08s}
+.slide.on .r:nth-child(3){animation-delay:.16s}
+.slide.on .r:nth-child(4){animation-delay:.24s}
+.slide.on .r:nth-child(5){animation-delay:.32s}
+@keyframes rise{from{opacity:.4;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Typo */
+.eyebrow{font-size:22px;font-weight:600;color:var(--muted)}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.022em;text-wrap:balance}
+h1{font-size:136px;line-height:.98}
+h2{font-size:68px;line-height:1.05;margin-top:12px}
+h3{font-size:44px;line-height:1.1;margin-top:8px}
+.grad{background:var(--flow);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:27px;line-height:1.4;color:var(--muted);font-weight:500;max-width:32ch;margin:26px 0 0;letter-spacing:-.015em}
+.lead b{color:var(--ink);font-weight:600}
+.body{font-size:21px;line-height:1.5;color:var(--muted);margin:0}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center}
+.center .lead{max-width:44ch}
+.cols{display:grid;grid-template-columns:560px 1fr;gap:80px;align-items:center;height:100%}
+.stack{display:flex;flex-direction:column}
+.on-in{margin-top:30px;font-size:18px;color:var(--faint);line-height:1.45}
+.on-in b{color:var(--muted);font-weight:600}
+.hint{font-size:14px;color:var(--faint);margin-top:10px}
+.card{background:var(--card);border-radius:28px;padding:40px 44px}
+
+/* echte Bilder */
+.pic{display:block;margin:0;border-radius:18px;overflow:hidden;background:#fff;border:1px solid var(--line);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.9);position:relative}
+.pic img{display:block;width:100%;height:auto;cursor:zoom-in}
+.pic .tag{position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:600;color:#fff;background:rgba(0,0,0,.66);
+  padding:5px 11px;border-radius:999px;backdrop-filter:blur(8px);pointer-events:none}
+
+/* Knopf zur Doku */
+.doku{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:12px;margin-top:30px;align-self:flex-start;
+  font-size:18px;font-weight:600;color:var(--blue);background:rgba(100,181,255,.1);padding:11px 20px 11px 14px;border-radius:999px;transition:background .2s}
+.doku:hover{background:rgba(100,181,255,.18)}
+.doku:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.doku i{width:18px;height:22px;border-radius:3px;border:2px solid var(--blue);position:relative;display:block}
+.doku i::after{content:"";position:absolute;left:3px;right:3px;top:4px;height:8px;border-top:2px solid var(--blue);border-bottom:2px solid var(--blue)}
+
+/* Customizing-Folien */
+.slide.cz{padding:64px 120px 0}
+.cz .head{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-bottom:22px}
+.cz .legend{display:flex;flex-direction:column;gap:6px;min-width:420px;max-width:560px}
+.cz .legend div{display:flex;gap:12px;align-items:center;font-size:18px;color:var(--muted);line-height:1.3}
+.cz .legend b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#001a33;font-size:14px;display:grid;place-items:center}
+.shotbox{position:relative;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 30px 70px -30px rgba(0,0,0,.9)}
+.shotbox img{display:block;width:100%;height:auto;cursor:zoom-in}
+.hl{position:absolute;border:3px solid var(--blue);border-radius:9px;background:rgba(100,181,255,.08);
+  box-shadow:0 0 0 5px rgba(100,181,255,.22);pointer-events:none}
+.hl::before{content:attr(data-n);position:absolute;left:-15px;top:-15px;width:26px;height:26px;border-radius:50%;
+  background:var(--blue);color:#001a33;font:700 14px/26px var(--font);text-align:center}
+.slide.on .hl{animation:pop .7s .45s cubic-bezier(.16,1,.3,1) both}
+@keyframes pop{from{transform:scale(1.08);opacity:.2}to{transform:none;opacity:1}}
+
+/* Titel */
+.title h1.hero{font-size:132px;line-height:1;margin-top:26px}
+.hero-sub{font-size:34px;max-width:none;margin-top:30px}
+.ratio{width:980px;margin-top:70px}
+.ratio .bar{display:flex;gap:6px;height:14px}
+.ratio .bar i{display:block;height:100%;border-radius:8px}
+.ratio .cust{flex:1;background:linear-gradient(90deg,#8e8e93,#f5f5f7);transform-origin:left center}
+.ratio .badi{width:54px;background:var(--card-2);border:1px solid var(--line)}
+.slide.on .ratio .cust{animation:grow 1.6s .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes grow{from{transform:scaleX(.55)}to{transform:none}}
+.ratio .legend2{display:flex;justify-content:space-between;margin-top:14px;font-size:17px;color:var(--muted)}
+.ratio .legend2 span{display:flex;align-items:center;gap:10px}
+.ratio .legend2 b{width:10px;height:10px;border-radius:50%;display:block}
+.ratio .legend2 .c{background:var(--ink)}
+.ratio .legend2 .b{background:var(--faint)}
+.kicker{font-size:26px;font-weight:600;color:var(--muted)}
+
+/* Zahlen */
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:72px;width:100%}
+.num .v{font-size:116px;font-weight:700;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
+.num .l{font-size:21px;color:var(--muted);margin-top:14px;line-height:1.35}
+
+/* Heute */
+.duo-pics{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:48px;align-items:start}
+.duo-pics .cap{font-size:18px;font-weight:600;color:var(--muted);margin-top:14px;text-align:center}
+
+/* Titel-Mock */
+.label{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:12px}
+.said{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:22px;line-height:1.45;color:var(--muted)}
+.said em{font-style:normal;color:var(--ink)}
+.says{font-size:38px;line-height:1.2;font-weight:600;letter-spacing:-.02em}
+.says em{font-style:normal;color:var(--blue)}
+
+/* Template */
+.tpl{display:grid;grid-template-columns:1fr auto 1fr;gap:44px;align-items:center}
+.tpl .side{display:flex;flex-wrap:wrap;gap:10px;align-content:center}
+.tpl .side.l{justify-content:flex-end}
+.pill{font-size:18px;font-weight:500;padding:9px 18px;border-radius:999px;background:var(--card-2);color:var(--ink);white-space:nowrap}
+.pill.soft{color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill.fld{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:16px;color:var(--ink)}
+.tpl .core{width:250px;height:250px;border-radius:50%;display:grid;place-items:center;text-align:center;position:relative;
+  background:radial-gradient(circle at 50% 35%,#222225,#101011 72%)}
+.tpl .core::before{content:"";position:absolute;inset:0;border-radius:50%;padding:2px;background:var(--flow);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.tpl .core b{display:block;font-size:34px;letter-spacing:-.03em}
+.tpl .core span{font-size:17px;color:var(--muted)}
+.money{display:flex;gap:30px;margin-top:44px;align-items:baseline;justify-content:center}
+.money .old{font-size:30px;color:var(--faint);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.money .new{font-size:56px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.money .arrow{font-size:30px;color:var(--faint)}
+.money .body{max-width:26ch;margin-left:20px}
+
+/* Regel */
+.rule{display:flex;flex-direction:column;align-items:center}
+.rule .q{font-size:30px;font-weight:600;padding:26px 44px;border-radius:999px;background:var(--card-2)}
+.rule .q b{color:var(--blue);font-weight:600}
+.rule svg{width:520px;height:110px;display:block}
+.rule svg path{fill:none;stroke:var(--line);stroke-width:2.5}
+.rule svg path.yes{stroke:var(--ink)}
+.rule .ends{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:640px}
+.rule .ends div{border-radius:24px;padding:28px 30px;background:var(--card)}
+.rule .ends b{display:block;font-size:30px;letter-spacing:-.02em}
+.rule .ends span{font-size:19px;color:var(--muted)}
+.rule .ends .yes b{color:var(--ink)}
+
+/* Mail */
+.mail{background:#fbfbfd;color:#1d1d1f;border-radius:24px;padding:34px 40px;font-size:20px;line-height:1.5}
+.mail .from{font-size:15px;color:#86868b}
+.mail .s{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 14px}
+.mail table{width:100%;border-collapse:collapse;margin-top:14px;font-variant-numeric:tabular-nums}
+.mail td{padding:10px 0;border-top:1px solid #e5e5ea}
+.mail td:last-child{text-align:right;font-weight:600}
+
+/* Doku-Collage */
+.collage{position:relative;height:640px}
+.collage .back{position:absolute;right:0;top:0;width:660px}
+.collage .front{position:absolute;left:0;bottom:0;width:380px;box-shadow:0 40px 80px -20px rgba(0,0,0,.95)}
+
+/* Konsole */
+.list{border-radius:24px;background:var(--card);padding:6px 30px}
+.row{display:grid;grid-template-columns:28px 1fr auto;gap:18px;align-items:center;padding:16px 0;border-top:1px solid var(--line);font-size:21px}
+.row:first-child{border-top:0}
+.row small{display:block;font-size:16px;color:var(--muted);margin-top:2px}
+.row .d{font-variant-numeric:tabular-nums;font-weight:600}
+.dot{width:14px;height:14px;border-radius:50%}
+.dot.g{background:var(--green)} .dot.y{background:var(--amber)} .dot.r{background:var(--red)}
+.dot.o{border:2px solid var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:40px}
+.stats b{display:block;font-size:64px;font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stats span{display:block;font-size:20px;color:var(--muted);margin-top:10px;line-height:1.35}
+
+.twoshots{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.way b{display:block;font-size:28px;letter-spacing:-.02em;line-height:1.2}
+.way span{display:block;font-size:19px;color:var(--muted);margin-top:10px;line-height:1.5}
+.way .who{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:8px}
+.helpgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:56px;width:100%;text-align:left}
+.helpgrid .card{padding:30px 32px}
+.helpgrid b{display:block;font-size:25px;letter-spacing:-.02em;line-height:1.2}
+.helpgrid span{display:block;font-size:18px;color:var(--muted);margin-top:10px;line-height:1.45}
+
+/* Qualität */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:64px;width:100%;text-align:left}
+.pillars .card{padding:36px 40px}
+.pillars b{display:block;font-size:30px;letter-spacing:-.02em;line-height:1.15}
+.pillars span{display:block;font-size:20px;color:var(--muted);margin-top:12px;line-height:1.45}
+.pillars .who{font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);margin-bottom:10px}
+.proof{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:60px;width:100%;text-align:left}
+.proof .card{padding:38px 40px}
+.proof .v{font-size:76px;font-weight:700;letter-spacing:-.045em;line-height:1}
+.proof .l{font-size:20px;line-height:1.45;color:var(--muted);margin-top:16px}
+.story{margin:36px 0 0;width:100%;text-align:left;font-size:24px;line-height:1.45;color:var(--muted)}
+.story b{color:var(--ink);font-weight:600}
+
+/* Eingeben */
+.inputs{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start;margin-top:40px}
+
+/* Auf einen Blick */
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:52px}
+.feat{border-radius:22px;background:var(--card);padding:24px 26px 26px}
+.feat b{display:block;font-size:23px;letter-spacing:-.02em}
+.feat span{display:block;font-size:17px;color:var(--muted);margin-top:6px;line-height:1.4}
+.feat.out{background:transparent;border:1px solid var(--line)}
+
+/* Navigation */
+.progress{position:absolute;left:120px;right:120px;bottom:40px;height:3px;border-radius:3px;background:var(--card-2);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--ink);border-radius:3px;transition:width .7s cubic-bezier(.16,1,.3,1)}
+.hud{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;z-index:5;opacity:.45;transition:opacity .2s}
+.hud:hover,.hud:focus-within{opacity:1}
+.hud button{font-family:var(--font);font-size:14px;color:var(--ink);background:var(--card-2);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.hud button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.hud .count{font-size:14px;color:var(--muted);padding:0 6px;font-variant-numeric:tabular-nums}
+body.overview .stage{display:none}
+.grid-ov{display:none;position:fixed;inset:0;overflow:auto;padding:40px 16px;z-index:4}
+body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;align-content:start;max-width:1400px;margin:0 auto}
+.grid-ov button{all:unset;cursor:pointer;border-radius:20px;background:var(--card);padding:22px 24px;min-height:110px}
+.grid-ov button:hover,.grid-ov button:focus-visible{background:var(--card-2)}
+.grid-ov .n{font-size:14px;color:var(--muted)}
+.grid-ov .t{font-size:22px;font-weight:600;margin-top:8px;line-height:1.2;letter-spacing:-.02em}
+.lb{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px 16px;cursor:zoom-out}
+.lb img{max-width:min(1800px,96vw);max-height:86vh;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.6);background:#fff}
+.lb .cap{font-size:16px;color:#c7c7cc;text-align:center}
+.lb.tall{justify-content:flex-start;overflow:auto}
+.lb.tall img{max-height:none;max-width:min(900px,94vw)}
+@media (prefers-reduced-motion:reduce){.slide.on .ratio .cust,.slide.on .r,.slide.on .hl{animation:none}.progress i{transition:none}}
+</style>
+
+<div class="viewport">
+<div class="stage" id="stage">
+  <!-- Titel -->
+  <section class="slide title" data-title="One document, pure configuration">
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="kicker r">conFLOW &middot; What is new</div>
+      <h1 class="r hero">One document<br><span class="grad">Pure configuration</span></h1>
+      <p class="lead r hero-sub">The BAdI is still there, <b>for the genuine exceptions</b></p>
+      <div class="ratio r" aria-hidden="true">
+        <div class="bar"><i class="cust"></i><i class="badi"></i></div>
+        <div class="legend2"><span><b class="c"></b>Configuration: object, title, agents, rules, buttons, mail, app</span><span><b class="b"></b>BAdI</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Worum es geht -->
+  <section class="slide" data-title="What this is about">
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="eyebrow r">What this is about</div>
+      <h2 class="r">Approvals you understand<br>and configure, instead of programming them</h2>
+      <div class="pillars r">
+        <div class="card"><div class="who">For the approver</div><b>Clear at a glance</b><span>Titles that speak, real document data, unambiguous buttons. In the SAP GUI just as in Fiori.</span></div>
+        <div class="card"><div class="who">For the consultant</div><b>Configuration instead of code</b><span>Much of what used to need a piece of customer coding is now an entry in the maintenance dialog.</span></div>
+        <div class="card"><div class="who">For existing customers</div><b>Everything keeps running</b><span>New behaviour stays off until you switch it on. Existing workflows run exactly as before.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Heute -->
+  <section class="slide" data-title="Two front ends" style="padding-top:80px">
+    <div class="center">
+      <div class="eyebrow r">What it looks like</div>
+      <h2 class="r">The same work item, two front ends</h2>
+    </div>
+    <div class="duo-pics r">
+      <div><figure class="pic"><img src="screenshots/gui-entscheidung-00500.png" alt="Decision in the SAP GUI"></figure><div class="cap">SAP GUI</div></div>
+      <div><figure class="pic"><img src="screenshots/fiori-inbox-00500.png" alt="Decision in the Fiori My Inbox"></figure><div class="cap">Fiori My Inbox</div></div>
+    </div>
+  </section>
+
+  <!-- Objekt -->
+  <section class="slide cz" data-title="The object">
+    <div class="head r">
+      <div><div class="eyebrow">The object</div><h3>Whoever builds the workflow gives the object a name</h3></div>
+      <div class="legend">
+        <div><b>1</b>The label per workflow, for example &bdquo;Salesorder Item&ldquo;</div>
+        <div><b>2</b>In the work item it leads to the document with one click</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c06-definition.png" alt="Maintenance dialog, workflow definition with object text">
+      <span class="hl" data-n="1" style="left:41%;top:60.8%;width:13.3%;height:5.8%"></span>
+      <span class="hl" data-n="2" style="left:71.5%;top:39.6%;width:26.4%;height:8%"></span>
+    </div>
+  </section>
+
+  <!-- Template -->
+  <section class="slide" data-title="The template">
+    <div class="center">
+      <div class="eyebrow r">The heart of it: the template</div>
+      <h2 class="r">Read once, available everywhere</h2>
+      <p class="lead r" style="margin-top:18px">The template reads the document and offers its fields &mdash; for the title, for rules and for the mail.</p>
+    </div>
+    <div class="tpl r" style="margin-top:44px">
+      <div class="side l">
+        <span class="pill">Purchase order</span><span class="pill">Sales order</span><span class="pill">Purchase requisition</span><span class="pill">Incoming invoice</span>
+        <span class="pill">FI document</span><span class="pill">Vendor</span><span class="pill">Customer</span><span class="pill">Business partner</span>
+      </div>
+      <div class="core"><div><b>Template</b><span>reads the document</span></div></div>
+      <div class="side">
+        <span class="pill">Title</span><span class="pill">Rules</span><span class="pill">Mail</span><span class="pill">Jump to document</span><span class="pill soft">your own fields</span>
+      </div>
+    </div>
+    <div class="money r">
+      <span class="old">4000.0000</span><span class="arrow">&rarr;</span><span class="new">4,000.00 EUR</span>
+      <span class="body">Amounts look the same in the work item and in the mail, in every currency.</span>
+    </div>
+  </section>
+
+  <!-- Template einstellen -->
+  <section class="slide cz" data-title="Setting the template">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>One line connects the workflow to the document</h3></div>
+      <div class="legend">
+        <div><b>1</b>Which document is read, here sales orders</div>
+        <div><b>2</b>Which fields you then have is in the documentation</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c08-parameter.png" alt="Maintenance dialog, general parameters with the template">
+      <span class="hl" data-n="1" style="left:15%;top:30%;width:55%;height:3%"></span>
+      <span class="hl" data-n="2" style="left:71.4%;top:26.6%;width:26.4%;height:5%"></span>
+    </div>
+  </section>
+
+  <!-- Titel -->
+  <section class="slide" data-title="Document data in the title">
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">The template at work</div>
+        <h2 class="r">Document data in the title, without a line of code</h2>
+        <p class="lead r">Until now every title with document data needed a piece of BAdI. Now the template delivers the fields, <b>and the step text only needs the placeholder.</b></p>
+      </div>
+      <div class="card r" style="padding:40px 44px">
+        <div class="label">The vendor template delivers</div>
+        <div class="pills" style="margin-top:0">
+          <span class="pill fld">vendor_no</span><span class="pill fld">name</span><span class="pill fld">city</span><span class="pill fld">country</span><span class="pill fld">created_on</span><span class="pill fld">pmnt_block</span><span class="pill soft">and 20 more</span>
+        </div>
+        <div class="label" style="margin-top:34px">In the step text</div>
+        <div class="said">Approve from Marketing <em>&sect;{vendor_no}</em> - <em>&sect;{name}</em></div>
+        <div class="label" style="margin-top:34px">At the approver</div>
+        <div class="says">Approve from Marketing <em>1000060</em> - <em>Stephan GmbH</em></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eigene Templates -->
+  <section class="slide" data-title="Your own templates">
+    <div class="cols" style="grid-template-columns:520px 1fr">
+      <div class="stack">
+        <div class="eyebrow r">Your own document types</div>
+        <h2 class="r">A template of your own is quickly built</h2>
+        <p class="lead r">For object types that are not shipped, or for fields that are missing. No scenario of your own as in Flexible Workflow, <b>just a small class.</b></p>
+      </div>
+      <div class="stack r" style="gap:22px">
+        <div class="card way"><div class="who">Way 1</div><b>Extend a shipped template</b><span>Append the field to the template structure, inherit from the class, redefine one method. The new field is immediately available for title, rules and mail.</span></div>
+        <div class="card way"><div class="who">Way 2</div><b>Build your own template</b><span>Use the template class and define your own fields. That way every object type gets its template, including your own Z objects.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eigene Templates: Beispiel -->
+  <section class="slide cz" data-title="Your own template: example">
+    <div class="head r">
+      <div><div class="eyebrow">What way 1 looks like</div><h3>One field added, one method redefined</h3></div>
+      <div class="legend">
+        <div><b>1</b>The new field, appended to the structure</div>
+        <div><b>2</b>First the shipped template reads the document</div>
+        <div><b>3</b>Then your own class fills its field</div>
+      </div>
+    </div>
+    <div class="twoshots r">
+      <div class="stack" style="gap:24px">
+        <div class="shotbox">
+          <img src="screenshots/tpl-append.png" alt="Template structure with an appended field">
+          <span class="hl" data-n="1" style="left:1%;top:85.5%;width:68%;height:14%"></span>
+        </div>
+        <div class="card way" style="padding:30px 34px"><b>And that is it</b><span>Enter the class as the template in the configuration. The new field appears in the field list and is ready for placeholders, rules and mail.</span></div>
+        <div class="card way" style="padding:30px 34px;background:transparent;border:1px solid var(--line)"><div class="who">Way 2</div><span style="margin-top:0">Same principle for an object type of your own: use the template class and define your own fields.</span></div>
+      </div>
+      <div class="shotbox">
+        <img src="screenshots/tpl-klasse.png" alt="Your own template class with a redefined method">
+        <span class="hl" data-n="2" style="left:12%;top:31.5%;width:28%;height:20%"></span>
+        <span class="hl" data-n="3" style="left:15.5%;top:91%;width:29%;height:4.6%"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schritte -->
+  <section class="slide cz" data-title="Priority and placeholders">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>New at the step: the priority</h3></div>
+      <div class="legend">
+        <div><b>1</b>The step text already existed &mdash; new are the template fields inside it</div>
+        <div><b>2</b>New: the priority, here &bdquo;4 High&ldquo;</div>
+        <div><b>3</b>The documentation explains both</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c01-schritte.png" alt="Maintenance dialog, approval steps">
+      <span class="hl" data-n="1" style="left:25.2%;top:24.8%;width:24.8%;height:32%"></span>
+      <span class="hl" data-n="2" style="left:62.6%;top:27.3%;width:7%;height:3.2%"></span>
+      <span class="hl" data-n="3" style="left:71%;top:56.2%;width:26.4%;height:17.8%"></span>
+    </div>
+  </section>
+
+  <!-- Bearbeiter -->
+  <section class="slide cz" data-title="Agents: org model or role">
+    <div class="head r">
+      <div><div class="eyebrow">Agents</div><h3>Org model or authorisation role</h3></div>
+      <div class="legend">
+        <div><b>1</b>As before: user, position or organisational unit</div>
+        <div><b>2</b>New: a role &mdash; its users decide</div>
+        <div><b>3</b>The documentation says who counts</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c03-bearbeiter.png" alt="Maintenance dialog, agents with a role">
+      <span class="hl" data-n="1" style="left:20.2%;top:25%;width:7.8%;height:8.4%"></span>
+      <span class="hl" data-n="2" style="left:49.7%;top:25%;width:13.3%;height:3.6%"></span>
+      <span class="hl" data-n="3" style="left:71.6%;top:38%;width:26.4%;height:5.2%"></span>
+    </div>
+  </section>
+
+  <!-- Vier-Augen -->
+  <section class="slide" data-title="Four eyes">
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">The four-eyes principle</div>
+        <h2 class="r">Whoever orders<br>does not approve</h2>
+        <p class="lead r">One tick subtracts people from the agents. That used to need a piece of BAdI, <b>now one entry is enough.</b></p>
+        <p class="on-in r">A query or a correction comes back to the same stage, and still <b>nobody decides two stages.</b> If nobody is left, the work item sits with nobody. The exclusion applies to the mails as well.</p>
+      </div>
+      <div class="card r">
+        <div class="label">Purchasing checks</div>
+        <div class="list" style="padding:0;background:transparent">
+          <div class="row"><b>+</b><div>Role Purchasing<small>all users of the role</small></div><span></span></div>
+          <div class="row"><b>&minus;</b><div>Whoever started the workflow<small>the requester</small></div><span class="d">excluded</span></div>
+        </div>
+        <div class="label" style="margin-top:34px">Plant management approves</div>
+        <div class="list" style="padding:0;background:transparent">
+          <div class="row"><b>+</b><div>Role Plant management<small>all users of the role</small></div><span></span></div>
+          <div class="row"><b>&minus;</b><div>Whoever already decided another stage<small>new: approvers of the other stages of this workflow</small></div><span class="d">excluded</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ausschluss einstellen -->
+  <section class="slide cz" data-title="Excluding agents">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>One tick per agent line</h3></div>
+      <div class="legend">
+        <div><b>1</b>New: exclude whatever this line resolves to</div>
+        <div><b>2</b>Whoever started it, whoever decided another stage</div>
+        <div><b>3</b>The four-eyes principle, written up in the documentation</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c03-ausschluss.png" alt="Maintenance dialog, agents with the exclude column">
+      <span class="hl" data-n="1" style="left:29.3%;top:9.2%;width:4.7%;height:13.9%"></span>
+      <span class="hl" data-n="2" style="left:67.2%;top:66.3%;width:31.9%;height:8.4%"></span>
+      <span class="hl" data-n="3" style="left:67.2%;top:76.2%;width:31.9%;height:22.5%"></span>
+    </div>
+  </section>
+
+  <!-- Regel -->
+  <section class="slide" data-title="The rule">
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">The rule</div>
+        <h2 class="r">Simple cases take care of themselves</h2>
+        <p class="lead r">You set the threshold in the configuration, on a field from the template. The log shows why the workflow took this way.</p>
+        <p class="on-in r">If it grows into a whole decision table, <b>a background step can ask BRFplus, for example.</b></p>
+      </div>
+      <div class="rule r">
+        <div class="q">Order value <b>above 1,000</b>?</div>
+        <svg viewBox="0 0 520 110" aria-hidden="true"><path d="M260 0 C 260 60, 110 50, 110 110"/><path class="yes" d="M260 0 C 260 60, 410 50, 410 110"/></svg>
+        <div class="ends">
+          <div><b>Yes</b><span>a person decides</span></div>
+          <div class="yes"><b>No</b><span>done, with nobody involved</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regel einstellen -->
+  <section class="slide cz" data-title="Setting the rule">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>Per outcome: one condition and one target</h3></div>
+      <div class="legend">
+        <div><b>1</b>Where it goes next</div>
+        <div><b>2</b>The condition, here the value above or below 1,000</div>
+        <div><b>3</b>Hints in the documentation, and a correction proposal on a typo</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c09-status.png" alt="Maintenance dialog, additional status with conditions">
+      <span class="hl" data-n="1" style="left:41.9%;top:28.2%;width:3.9%;height:6.2%"></span>
+      <span class="hl" data-n="2" style="left:62.1%;top:28.2%;width:20.2%;height:6.2%"></span>
+      <span class="hl" data-n="3" style="left:83.4%;top:62.4%;width:15.2%;height:24%"></span>
+    </div>
+  </section>
+
+  <!-- Knoepfe -->
+  <section class="slide" data-title="The decision">
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">The decision</div>
+        <h2 class="r">Green means yes<br>Red means no</h2>
+        <p class="lead r">The decisions that matter stand out. Where it is needed, conFLOW asks for a reason &mdash; <b>in the SAP GUI just as in Fiori.</b></p>
+      </div>
+      <div class="stack r" style="gap:20px">
+        <figure class="pic"><img src="screenshots/gui-knoepfe.png" alt="Coloured decisions in the SAP GUI"><span class="tag">SAP GUI</span></figure>
+        <figure class="pic" style="padding:6px 0"><img src="screenshots/fiori-knoepfe.png" alt="Coloured buttons in the Fiori My Inbox"></figure>
+        <div class="hint" style="margin-top:0">Fiori My Inbox &middot; click to enlarge</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Knoepfe einstellen -->
+  <section class="slide cz" data-title="Colour and mandatory comment">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>Colour and mandatory reason, per button</h3></div>
+      <div class="legend">
+        <div><b>1</b>Colour and mandatory comment</div>
+        <div><b>2</b>Applies to the SAP GUI and Fiori alike</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c09-status.png" alt="Maintenance dialog with colour and mandatory comment">
+      <span class="hl" data-n="1" style="left:50.6%;top:28.2%;width:11.4%;height:6.2%"></span>
+      <span class="hl" data-n="2" style="left:83.4%;top:43.8%;width:15.2%;height:13.6%"></span>
+    </div>
+  </section>
+
+  <!-- Mail -->
+  <section class="slide" data-title="The mail" style="padding-top:80px">
+    <div class="eyebrow r">The mail</div>
+    <h2 class="r">The mail says what the work item says</h2>
+    <p class="lead r" style="max-width:62ch">Every field from the template is available as a placeholder, and amounts and dates arrive properly formatted. On request the mail goes out in the language of the recipient, and the preview in the maintenance dialog shows how it will look.</p>
+    <figure class="pic r" style="margin-top:36px"><img src="screenshots/mail-steuerung.png" alt="Mail control with preview in the maintenance dialog"><span class="tag">Mail control with preview</span></figure>
+    <button class="doku r" type="button" data-img="doku-c07.png" data-cap="Documentation in the maintenance dialog &middot; Mail control" style="margin-top:24px"><i></i>How the documentation puts it</button>
+  </section>
+
+  <!-- Eigene App -->
+  <section class="slide" data-title="Your own app">
+    <div class="cols" style="grid-template-columns:460px 1fr">
+      <div class="stack">
+        <div class="eyebrow r">Your own app</div>
+        <h2 class="r">The right app, by one entry</h2>
+        <p class="lead r">Whether a work item shows the standard view in the Fiori inbox or an app of your own is now part of the configuration.</p>
+        <p class="on-in r">Work items <b>that are already under way</b> can be switched over afterwards.</p>
+      </div>
+      <figure class="pic r"><img src="screenshots/fiori-inbox-00500.png" alt="My Inbox with an app of your own"><span class="tag">Your own app in My Inbox</span></figure>
+    </div>
+  </section>
+
+  <!-- VISU einstellen -->
+  <section class="slide cz" data-title="Setting your own app">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>One entry, and the inbox opens your app</h3></div>
+      <div class="legend">
+        <div><b>1</b>The app that should open</div>
+        <div><b>2</b>Without an entry it stays the standard inbox</div>
+      </div>
+    </div>
+    <div class="shotbox r">
+      <img src="screenshots/cust-c08-parameter.png" alt="Maintenance dialog, general parameters with the Fiori app">
+      <span class="hl" data-n="1" style="left:15%;top:32.8%;width:55%;height:3%"></span>
+      <span class="hl" data-n="2" style="left:71.4%;top:54%;width:26.4%;height:8%"></span>
+    </div>
+  </section>
+
+  <!-- Doku -->
+  <section class="slide" data-title="The documentation">
+    <div class="cols" style="grid-template-columns:480px 1fr">
+      <div class="stack">
+        <div class="eyebrow r">The documentation</div>
+        <h2 class="r">The explanation sits right beside it</h2>
+        <p class="lead r">Every view in the maintenance dialog explains its fields. On top of that, every workflow can carry <b>a description of its own</b>: what it is for, who looks after it, what to watch out for.</p>
+        <p class="on-in r">That description sits at the very top. So whoever maintains the workflow later will find it.</p>
+      </div>
+      <div class="collage r">
+        <figure class="pic back"><img src="screenshots/doku-eigene-editor.png" alt="Editor for your own documentation with preview"><span class="tag">Editing with preview</span></figure>
+        <figure class="pic front"><img src="screenshots/doku-eigene-oben.png" alt="Your own documentation above the standard documentation"><span class="tag">Your own text on top</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Betrieb -->
+  <section class="slide" data-title="Running it" style="padding-top:80px">
+    <div class="eyebrow r">Running it</div>
+    <h2 class="r">Seeing what is left lying around</h2>
+    <figure class="pic r" style="margin-top:34px"><img src="screenshots/admin-auswertung.png" alt="Admin console evaluation per step"><span class="tag">Admin console &middot; evaluation per step</span></figure>
+    <div class="stats r">
+      <div><b>336</b><span>work items of this workflow, laid out per step</span></div>
+      <div><b>6d 06h</b><span>is how long the oldest has been waiting &mdash; the light shows it red</span></div>
+      <div><b>81.8 %</b><span>of the escalations end in a rejection</span></div>
+    </div>
+  </section>
+
+  <!-- Uebergang zum Fall -->
+  <section class="slide title" data-title="And in real life?">
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="kicker r">Part two &middot; A real case</div>
+      <h1 class="r hero">And in real life?<br><span class="grad">NIS2 supplier review</span></h1>
+      <p class="lead r hero-sub">The same building blocks, one afternoon, <b>a process that runs end to end.</b></p>
+      <p class="on-in r" style="margin-top:38px">Everything from here on is a real run in a real system. Every screenshot was checked against the database, not just against the screen.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-title="The task">
+
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="eyebrow r">The task</div>
+      <h2 class="r">Check your suppliers &mdash;<br>as deeply as their criticality demands</h2>
+      <div class="pillars r">
+        <div class="card"><div class="who">Stage 1</div><b>Supplier responsible</b><span>Checks NIS2 relevance and the master data. Every reviewed supplier passes this stage.</span></div>
+        <div class="card"><div class="who">Stage 2</div><b>Responsible buyer</b><span>Business relationship, contracts, dependency. Only from criticality NIS2-2 upwards.</span></div>
+        <div class="card"><div class="who">Stage 3</div><b>Security team</b><span>Certificates, audits, incidents. Reserved for the critical suppliers, NIS2-3.</span></div>
+      </div>
+      <p class="on-in r" style="margin-top:38px">Every stage records a <b>result</b> and a <b>note</b>. The last one is written back to the supplier.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-title="The case decides" style="padding-top:70px">
+
+    <div class="center">
+      <div class="eyebrow r">The case decides</div>
+      <h2 class="r">One definition, three ways through</h2>
+    </div>
+    <div class="duo-pics r" style="grid-template-columns:1fr 1fr 1fr;gap:26px;margin-top:40px">
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/A1-protokoll.png" alt="Log of a workflow that ended without a review"></figure><div class="cap">Not relevant &middot; no task at all</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/A2-protokoll-standardprofil.png" alt="Log with one review stage"></figure><div class="cap">NIS2-1 &middot; one stage</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/A4-protokoll-standardprofil.png" alt="Log with three review stages"></figure><div class="cap">NIS2-3 &middot; three stages</div></div>
+    </div>
+    <p class="on-in r" style="text-align:center;margin-top:34px">The branch is a <b>condition on a background step</b>, not a line of code. Change the field on the supplier and the same workflow behaves differently.</p>
+  </section>
+
+  <section class="slide" data-title="The task in the inbox">
+
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">In the inbox</div>
+        <h2 class="r">The task explains itself</h2>
+        <p class="lead r">Title with supplier number, name and criticality. Below it the supplier data, the job for this stage, and what the decision means &mdash; <b>all from the maintenance dialog.</b></p>
+        <p class="on-in r">The text comes from a standard text (SO10) with placeholders; the template fills them from the supplier.</p>
+      </div>
+      <figure class="pic r" style=""><img src="screenshots/nis2/C7-fiori-app.png" alt="Fiori My Inbox with the task and the review app"></figure>
+    </div>
+  </section>
+
+  <section class="slide" data-title="From the task to the document" style="padding-top:70px">
+
+    <div class="center">
+      <div class="eyebrow r">One click away</div>
+      <h2 class="r">The document is attached, not described</h2>
+    </div>
+    <div class="duo-pics r" style="margin-top:44px">
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/C4-objektliste.png" alt="Related objects: workflow and supplier"></figure><div class="cap">Every task carries its document</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/C4-doppelklick.png" alt="Supplier display, opened from the task"></figure><div class="cap">One click opens the supplier</div></div>
+    </div>
+    <p class="on-in r" style="text-align:center;margin-top:30px">Which document, and what it is called, comes from <b>two entries</b> &mdash; the template and the object text.</p>
+  </section>
+
+  <section class="slide" data-title="Deciding with input">
+
+    <div class="cols" style="grid-template-columns:1fr 620px">
+      <figure class="pic r" style=""><img src="screenshots/nis2/D2-eingabe-fiori.png" alt="Fiori My Inbox with the review panel"></figure>
+      <div class="stack">
+        <div class="eyebrow r">Deciding</div>
+        <h2 class="r">Result and note,<br>right where the decision happens</h2>
+        <p class="lead r">No second transaction, no attachment. The reviewer picks a result, types a note, and it is saved while typing.</p>
+        <p class="on-in r">Same panel in the SAP GUI, same data. Every change is logged with user, time and channel.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Mandatory means mandatory" style="padding-top:70px">
+
+    <div class="center">
+      <div class="eyebrow r">Nothing slips through</div>
+      <h2 class="r">Approving without a result is not possible</h2>
+    </div>
+    <div class="duo-pics r" style="margin-top:44px">
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/D3-meldung-fiori.png" alt="Error: please choose a review result"></figure><div class="cap">No result &middot; no approval</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/D4-meldung-notiz.png" alt="Error: result Critical needs a note"></figure><div class="cap">Critical &middot; a note is required</div></div>
+    </div>
+    <p class="on-in r" style="text-align:center;margin-top:30px">The rule lives in <b>one place</b> and guards every channel: Fiori, SAP GUI and any API call.</p>
+  </section>
+
+  <section class="slide" data-title="The next stage starts empty">
+
+    <div class="cols" style="grid-template-columns:1fr 1fr">
+      <div class="stack">
+        <div class="eyebrow r">Stage after stage</div>
+        <h2 class="r">Every stage has<br>its own verdict</h2>
+        <p class="lead r">Stage 2 does not inherit what stage 1 said. The panel starts empty, and the buyer decides for themselves.</p>
+        <p class="on-in r">Everything that was said stays: the log keeps every stage, and the closing mail lists them one below the other.</p>
+      </div>
+      <div>
+        <figure class="pic r" style=""><img src="screenshots/nis2/D5-stufe2-leer.png" alt="Stage 2 with an empty review panel"><span class="tag">Stage 2 &middot; nothing prefilled</span></figure>
+        <figure class="pic r" style="margin-top:26px"><img src="screenshots/nis2/A3-protokoll.png" alt="Workflow log with two stages and a return"><span class="tag">The whole path, step by step</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Sending it back" style="padding-top:70px">
+
+    <div class="center">
+      <div class="eyebrow r">When a stage is not convinced</div>
+      <h2 class="r">Back one stage, with a reason</h2>
+    </div>
+    <div class="duo-pics r" style="margin-top:44px">
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/C2-kommentar-fiori.png" alt="Fiori asks for a mandatory decision note"></figure><div class="cap">The reason is mandatory, not polite</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/B3-zurueck-bei-vorentscheider.png" alt="Stage 1 back with the earlier result still there"></figure><div class="cap">Stage 1 returns &mdash; with what was entered before</div></div>
+    </div>
+    <p class="on-in r" style="text-align:center;margin-top:30px">The task goes back to <b>the same person</b>, not to a queue. Nobody starts from scratch.</p>
+  </section>
+
+  <section class="slide" data-title="Four eyes in practice">
+
+    <div class="cols" style="grid-template-columns:1fr 1fr">
+      <div class="stack">
+        <div class="eyebrow r">Four eyes</div>
+        <h2 class="r">Whoever decided once<br>does not decide again</h2>
+        <p class="lead r">The person who starts the review never gets their own task. And whoever decided stage 1 is out for stage 2 &mdash; <b>even though they are a named agent there.</b></p>
+        <p class="on-in r">Two rows in the agent table, no code: <b>WF_INITIATOR</b> and <b>WF_APPROVERS</b>, both marked as excluded.</p>
+      </div>
+      <div>
+        <figure class="pic r" style=""><img src="screenshots/nis2/B2-empfaenger-protokoll.png" alt="Agent tree of stage 2 with exactly one recipient"><span class="tag">Stage 2 &middot; one recipient left</span></figure>
+        <figure class="pic r" style="margin-top:26px"><img src="screenshots/nis2/B1-inbox-initiator-leer.png" alt="Empty inbox of the person who started the workflow"><span class="tag">The initiator &middot; no task</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Deadlines" style="padding-top:70px">
+
+    <div class="center">
+      <div class="eyebrow r">When nothing happens</div>
+      <h2 class="r">A reminder first, the lead second</h2>
+    </div>
+    <div class="duo-pics r" style="margin-top:44px">
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/E1-erinnerung.png" alt="Reminder task in the inbox, priority high"></figure><div class="cap">Deadline passed &middot; reminder, higher priority</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/E2-mail.png" alt="Escalation mail with the history so far"></figure><div class="cap">Still nothing &middot; escalation to the NIS2 lead</div></div>
+    </div>
+    <p class="on-in r" style="text-align:center;margin-top:30px">Deadline, follow-up step and recipient are three fields. <b>What was already typed stays</b> &mdash; the lead sees the half-finished review, not a blank form.</p>
+  </section>
+
+  <section class="slide" data-title="The mails">
+
+    <div class="cols" style="grid-template-columns:1fr 1fr">
+      <div>
+        <figure class="pic r" style=""><img src="screenshots/nis2/F4-mail-abschluss.png" alt="Completion mail with result per stage and history"><span class="tag">Completed &middot; result per stage</span></figure>
+      </div>
+      <div class="stack">
+        <div class="eyebrow r">The mails</div>
+        <h2 class="r">Everyone is told,<br>in their own language</h2>
+        <p class="lead r">New task, reminder, escalation, returned, rejected, completed, failed. Seven situations, each with its own text &mdash; <b>reason and history included.</b></p>
+        <p class="on-in r">The language follows the recipient, not the sender: the same rule sent one mail in German and one in English, in the same second.</p>
+        <figure class="pic r" style="margin-top:26px"><img src="screenshots/nis2/F3-mail-zurueck.png" alt="Mail: review returned, with reason and history"><span class="tag">Returned &middot; reason and history</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="One rule, two languages">
+
+    <div class="cols" style="grid-template-columns:1fr 720px">
+      <div class="stack">
+        <div class="eyebrow r">The same rule, the same second</div>
+        <h2 class="r">Everyone reads it<br>in their own language</h2>
+        <p class="lead r">Two recipients of the same mail rule, two languages. The language follows <b>the recipient</b> &mdash; not the person or the job that triggered the mail.</p>
+        <p class="on-in r">Subject and body come from standard texts. Where a translation is missing, the mail falls back instead of going out empty.</p>
+      </div>
+      <figure class="pic r" style=""><img src="screenshots/nis2/F6-sost-zwei-sprachen.png" alt="Two mails of the same rule, one German, one English"></figure>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Back into the master record">
+
+    <div class="cols" style="grid-template-columns:1fr 680px">
+      <div class="stack">
+        <div class="eyebrow r">The point of the whole thing</div>
+        <h2 class="r">The result lands<br>on the supplier</h2>
+        <p class="lead r">When the last stage is done, a background step writes the verdict into search term 2: <b>NIS2 OK 18.09.26</b>.</p>
+        <p class="on-in r">From there anyone can find it &mdash; in a list, in a report, in the next audit. Nobody has to open the workflow log.</p>
+      </div>
+      <figure class="pic r" style=""><img src="screenshots/nis2/G1-bp-suchbegriff.png" alt="Business partner with search term 2 set to NIS2 OK"></figure>
+    </div>
+  </section>
+
+  <section class="slide" data-title="When something goes wrong" style="padding-top:70px">
+
+    <div class="center">
+      <div class="eyebrow r">When something goes wrong</div>
+      <h2 class="r">Silence is the worst outcome</h2>
+    </div>
+    <div class="duo-pics r" style="margin-top:40px">
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/G2-mail-abbruch.png" alt="Mail: NIS2 review could not be started"></figure><div class="cap">The starter hears about it</div></div>
+      <div><figure class="pic r" style=""><img src="screenshots/nis2/G2-slg1.png" alt="Application log with the reason: partner is being processed"></figure><div class="cap">The log says exactly why</div></div>
+    </div>
+    <p class="on-in r" style="text-align:center;margin-top:30px">A locked business partner, a wrong key, a missing result: the workflow ends in a <b>named end status</b>, writes the reason to the application log and tells someone.</p>
+  </section>
+
+  <section class="slide cz" data-title="The definition">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>A workflow is a row &mdash; the number is the thread through everything</h3></div>
+      <div class="legend">
+        <div><b>1</b>Both reviews live next to every other workflow of the system</div>
+        <div><b>2</b>The documentation of the view sits right beside it</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c06-uebersicht.png" alt="Maintenance dialog: list of workflow definitions"><span class="hl" data-n="1" style="left:17.0%;top:17.0%;width:33.5%;height:6.3%"></span><span class="hl" data-n="2" style="left:53.3%;top:26.3%;width:46.4%;height:42.3%"></span></div>
+  </section>
+
+  <section class="slide cz" data-title="The steps">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>The steps, the deadline, the follow-up</h3></div>
+      <div class="legend">
+        <div><b>1</b>Empty means a person decides, <b>BACK_BATCH</b> means the system does</div>
+        <div><b>2</b>Priority per step: the reminder outranks the first task</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c01-schritte.png" alt="Maintenance dialog: approval steps"><span class="hl" data-n="1" style="left:41.6%;top:15.7%;width:5.6%;height:42.7%"></span><span class="hl" data-n="2" style="left:67.0%;top:15.7%;width:11.6%;height:42.7%"></span></div>
+    <p class="on-in r" style="margin-top:18px">Right next to it: the documentation of the view. It explains the fields while you are in them.</p>
+  </section>
+
+  <section class="slide cz" data-title="Transitions and deadlines">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>Reminder after ten minutes, escalation after twenty</h3></div>
+      <div class="legend">
+        <div><b>1</b>Deadline and unit &mdash; minutes here, days in real life</div>
+        <div><b>2</b>The step the deadline leads to, with its own agents</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c02-uebergaenge-frist.png" alt="Maintenance dialog: transitions with deadline"><span class="hl" data-n="1" style="left:54.7%;top:20.6%;width:5.7%;height:46.1%"></span><span class="hl" data-n="2" style="left:60.4%;top:20.6%;width:12.8%;height:46.1%"></span></div>
+  </section>
+
+  <section class="slide cz" data-title="The rule behind the branch">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>The branch is a condition, written the way you read the value</h3></div>
+      <div class="legend">
+        <div><b>1</b>The outcome and where it leads</div>
+        <div><b>2</b>The condition on the fields the template provides</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c09-regel-b1.png" alt="Maintenance dialog: rule on the background step"><span class="hl" data-n="1" style="left:40.2%;top:25.6%;width:4.9%;height:6.4%"></span><span class="hl" data-n="2" style="left:58.3%;top:25.6%;width:21.6%;height:6.4%"></span></div>
+  </section>
+
+  <section class="slide cz" data-title="Four eyes, configured">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>Two rows keep people out &mdash; no code, no role concept</h3></div>
+      <div class="legend">
+        <div><b>1</b>The agents behind each key</div>
+        <div><b>2</b>Excluded: the initiator, and everyone who already decided</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c03-bearbeiter-exclude.png" alt="Maintenance dialog: agents with the exclude column"><span class="hl" data-n="1" style="left:37.4%;top:22.8%;width:7.5%;height:66.7%"></span><span class="hl" data-n="2" style="left:54.4%;top:22.8%;width:6.2%;height:66.7%"></span></div>
+  </section>
+
+  <section class="slide cz" data-title="The document and the app">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>Which document is read, and which app opens it</h3></div>
+      <div class="legend">
+        <div><b>1</b>The template: it reads the supplier and provides the fields</div>
+        <div><b>2</b>The app the task opens in the Fiori inbox &mdash; empty means the standard one</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c08-parameter.png" alt="Maintenance dialog: general parameters"><span class="hl" data-n="1" style="left:18.2%;top:23.3%;width:32.7%;height:2.3%"></span><span class="hl" data-n="2" style="left:18.2%;top:25.7%;width:32.7%;height:2.3%"></span></div>
+  </section>
+
+  <section class="slide cz" data-title="The mails, configured">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>One row per situation &mdash; step, outcome, recipient, text</h3></div>
+      <div class="legend">
+        <div><b>1</b>Which outcome of which step sends a mail, and to whom</div>
+        <div><b>2</b>Subject and body are standard texts &mdash; with a preview built in</div>
+      </div>
+    </div>
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-c07-mailversand.png" alt="Maintenance dialog: mail rules with preview"><span class="hl" data-n="1" style="left:17.7%;top:32.1%;width:55.6%;height:12.8%"></span><span class="hl" data-n="2" style="left:74.4%;top:17.4%;width:25.3%;height:80.3%"></span></div>
+  </section>
+
+  <section class="slide cz" data-title="The text itself">
+
+    <div class="head r">
+      <div><div class="eyebrow">This is how it is set up</div><h3>A standard text with placeholders &mdash; no template engine, no transport of code</h3></div>
+      <div class="legend">
+        <div><b>1</b>Fields of the document, filled when the mail is sent</div>
+        <div><b>2</b>Paragraphs are plain HTML, so the mail reads like a mail</div>
+      </div>
+    </div>
+    <div style="max-width:1100px;margin:0 auto">
+    <div class="shotbox r"><img src="screenshots/nis2/CUST-so10-erinnerung.png" alt="Standard text of the reminder mail with placeholders"><span class="hl" data-n="1" style="left:44.6%;top:43.5%;width:40.8%;height:7.0%"></span><span class="hl" data-n="2" style="left:6.8%;top:68.0%;width:8.5%;height:7.0%"></span></div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Configuration, almost all of it">
+
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="eyebrow r">What it took to build</div>
+      <h2 class="r">Almost all of it is configuration</h2>
+      <div class="ratio r" aria-hidden="true" style="margin-top:56px">
+        <div class="bar"><i class="cust"></i><i class="badi"></i></div>
+        <div class="legend2">
+          <span><b class="c"></b>Configuration: steps, agents, four eyes, rules, deadlines, colours, mandatory comment, mails, the Fiori app, the log</span>
+          <span><b class="b"></b>Code</span>
+        </div>
+      </div>
+      <div class="pillars r" style="grid-template-columns:1fr 1fr;margin-top:56px">
+        <div class="card"><div class="who">Written for this case</div><b>The input panel</b><span>Result and note at the work item, plus the check that refuses an approval without them. One class, used by SAP GUI, Fiori and any API call alike.</span></div>
+        <div class="card"><div class="who">Written for this case</div><b>The write-back</b><span>One background step that puts the verdict on the business partner. Fifteen lines of business logic, the rest is careful error handling.</span></div>
+      </div>
+      <p class="on-in r" style="margin-top:34px">Input fields at the work item are <b>the next feature</b> of the product. Then even this case is pure configuration.</p>
+    </div>
+  </section>
+
+
+  <!-- Schluss -->
+  <section class="slide" data-title="Configuring is the quick part">
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="eyebrow r">Where that leaves you</div>
+      <h1 class="r" style="font-size:104px;margin-top:10px">Configuring is quick.<br><span class="grad">Changing your mind is cheap.</span></h1>
+      <p class="lead r" style="max-width:none">A process like this is an afternoon, not a project. And the second version costs about as little as the first &mdash; because it is a setting, not a program.</p>
+      <div class="helpgrid r" style="grid-template-columns:repeat(3,1fr);margin-top:56px">
+        <div class="card"><b>Start small</b><span>One step, one mail. Stages, deadlines and rules come later, when the process asks for them.</span></div>
+        <div class="card"><b>See it, try it</b><span>Every setting is visible in the maintenance dialog, with its documentation beside it and the log to show what happened.</span></div>
+        <div class="card"><b>Keep the exceptions</b><span>The BAdI has not gone anywhere. It is simply no longer the first thing you reach for.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- conflow-help.com -->
+  <section class="slide" data-title="conflow-help.com">
+    <div class="center" style="height:100%;justify-content:center">
+      <div class="eyebrow r">Read up on it</div>
+      <h1 class="r" style="font-size:112px;margin-top:14px"><span class="grad">conflow-help.com</span></h1>
+      <p class="lead r" style="max-width:none">Everything about conFLOW in one place, <b>in English and German.</b></p>
+      <p class="on-in r" style="margin-top:34px">The new features from these slides join it after testing.</p>
+    </div>
+  </section>
+  <div class="progress"><i id="bar"></i></div>
+</div>
+</div>
+
+<div class="grid-ov" id="ov"></div>
+<div class="lb" id="lb" hidden><img id="lbImg" alt=""><div class="cap" id="lbCap"></div></div>
+<div class="hud">
+  <span class="count" id="count"></span>
+  <button type="button" id="prev" aria-label="Previous slide">&lsaquo;</button>
+  <button type="button" id="next" aria-label="Next slide">&rsaquo;</button>
+  <button type="button" id="ovBtn">Overview</button>
+  <button type="button" id="fsBtn">Full screen</button>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var stage=document.getElementById('stage');
+  var bar=document.getElementById('bar');
+  var count=document.getElementById('count');
+  var ov=document.getElementById('ov');
+  var lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap');
+  var cur=0;
+
+  function openLb(src,cap){
+    lbImg.onload=function(){lb.classList.toggle('tall',lbImg.naturalHeight>lbImg.naturalWidth*1.3)};
+    lbImg.src=src;lbCap.textContent=cap||'';lb.hidden=false;
+  }
+  function closeLb(){lb.hidden=true;lbImg.removeAttribute('src')}
+  lb.addEventListener('click',closeLb);
+  document.querySelectorAll('.pic img,.shotbox img').forEach(function(img){
+    img.addEventListener('click',function(){openLb(img.src,img.alt)});
+  });
+  document.querySelectorAll('.doku[data-img]').forEach(function(b){
+    b.addEventListener('click',function(){openLb('screenshots/'+b.getAttribute('data-img'),b.getAttribute('data-cap'))});
+  });
+
+  slides.forEach(function(s,i){
+    var o=document.createElement('button');
+    o.type='button';
+    o.innerHTML='<div class="n">'+(i+1)+'</div><div class="t">'+s.getAttribute('data-title')+'</div>';
+    o.addEventListener('click',function(){document.body.classList.remove('overview');go(i)});
+    ov.appendChild(o);
+  });
+
+  function fit(){
+    stage.style.transform='scale('+Math.min(window.innerWidth/1600,window.innerHeight/900)+')';
+  }
+  function go(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,i){s.classList.toggle('on',i===cur)});
+    bar.style.width=((cur+1)/slides.length*100)+'%';
+    count.textContent=(cur+1)+' / '+slides.length;
+    try{history.replaceState(null,'','#'+(cur+1))}catch(e){}
+  }
+  function toggleOv(){document.body.classList.toggle('overview')}
+  function fs(){
+    try{
+      if(!document.fullscreenElement){document.documentElement.requestFullscreen()}
+      else{document.exitFullscreen()}
+    }catch(e){}
+  }
+
+  document.addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    var k=e.key;
+    if(!lb.hidden){if(k==='Escape'||k===' '||k==='Enter'){e.preventDefault();closeLb()}return}
+    if(k==='ArrowRight'||k==='PageDown'||k===' '){e.preventDefault();go(cur+1)}
+    else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();go(cur-1)}
+    else if(k==='Home'){go(0)}
+    else if(k==='End'){go(slides.length-1)}
+    else if(k==='o'||k==='O'){toggleOv()}
+    else if(k==='Escape'){document.body.classList.remove('overview')}
+    else if(k==='f'||k==='F'){fs()}
+  });
+  document.getElementById('prev').addEventListener('click',function(){go(cur-1)});
+  document.getElementById('next').addEventListener('click',function(){go(cur+1)});
+  document.getElementById('ovBtn').addEventListener('click',toggleOv);
+  document.getElementById('fsBtn').addEventListener('click',fs);
+
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50)go(cur+(dx<0?1:-1));x0=null;
+  });
+
+  window.addEventListener('resize',fit);
+  fit();
+  var h=parseInt(location.hash.slice(1),10);
+  go(isNaN(h)?0:h-1);
+})();
+</script>
+
+</html>
