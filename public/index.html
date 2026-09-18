@@ -238,6 +238,14 @@ body.overview .grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minma
 
 /* Lesemodus: Handy und schmale Fenster. Die Folien stehen untereinander und brechen um,
    statt als verkleinerte 1600x900-Buehne unlesbar zu werden. Schaltet body.read (JS). */
+
+.hud .hudlink{font-size:14px;color:var(--ink);background:var(--card-2);border-radius:999px;padding:8px 14px;text-decoration:none}
+.hud .hudlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+a.plain{color:inherit;text-decoration:none}
+.endlinks{display:flex;gap:14px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.endlinks .doku{margin-top:0;align-self:auto;text-decoration:none}
+.endlinks .restart{color:var(--muted);background:var(--card-2)}
+body.read .endlinks{justify-content:flex-start}
 .readhint{display:none}
 body.read .readhint{display:block;font-size:14px;color:var(--faint);margin:14px 0 0}
 body.read{overflow:auto;height:auto}
@@ -1007,9 +1015,10 @@ body.read .stack[style],body.read .stack{gap:18px}
   <section class="slide" data-title="conflow-help.com">
     <div class="center" style="height:100%;justify-content:center">
       <div class="eyebrow r">Explore the documentation</div>
-      <h1 class="r" style="font-size:112px;margin-top:14px"><span class="grad">conflow-help.com</span></h1>
+      <h1 class="r" style="font-size:112px;margin-top:14px"><a class="plain" href="https://conflow-help.com" target="_top"><span class="grad">conflow-help.com</span></a></h1>
       <p class="lead r" style="max-width:none">Everything about conFLOW in one place, <b>in English and German.</b></p>
       <p class="on-in r" style="margin-top:34px">The features shown here will be documented there once testing is complete.</p>
+      <div class="endlinks r"><a class="doku" href="https://conflow-help.com" target="_top">Open the documentation</a><button class="doku restart" type="button" id="restart">Restart the story</button></div>
     </div>
   </section>
   <div class="progress"><i id="bar"></i></div>
@@ -1022,6 +1031,7 @@ body.read .stack[style],body.read .stack{gap:18px}
   <span class="count" id="count"></span>
   <button type="button" id="prev" aria-label="Previous slide">&lsaquo;</button>
   <button type="button" id="next" aria-label="Next slide">&rsaquo;</button>
+  <a class="hudlink" href="https://conflow-help.com" target="_top">Documentation</a>
   <button type="button" id="ovBtn">Overview</button>
   <button type="button" id="fsBtn">Full screen</button>
 </div>
@@ -1097,6 +1107,7 @@ body.read .stack[style],body.read .stack{gap:18px}
   document.getElementById('next').addEventListener('click',function(){go(cur+1)});
   document.getElementById('ovBtn').addEventListener('click',toggleOv);
   document.getElementById('fsBtn').addEventListener('click',fs);
+  document.getElementById('restart').addEventListener('click',function(){if(document.body.classList.contains('read')){window.scrollTo(0,0)}else{go(0)}});
 
   var x0=null;
   document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
