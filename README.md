@@ -4,8 +4,9 @@ Static slide deck, English, to click through: what a conFLOW approval can do
 now, how each part is configured, and one real case (NIS2 supplier review)
 from end to end.
 
-**Live:** https://conflow-story.pages.dev
-(Cloudflare Pages · auto-deploy on every push to `main`)
+**Live:** https://conflow-story.johannes-zwinger.workers.dev
+(Cloudflare Workers, static assets · auto-deploy on every push to `main`;
+`.assetsignore` keeps `.git` and this README off the site)
 
 ## Contents
 - `index.html` — the deck, 48 slides
