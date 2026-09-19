@@ -82,7 +82,7 @@ h3{font-size:44px;line-height:1.1;margin-top:8px}
 .cz .legend b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#001a33;font-size:14px;display:grid;place-items:center}
 .shotbox{position:relative;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 30px 70px -30px rgba(0,0,0,.9)}
 .shotbox img{display:block;width:100%;height:auto;cursor:zoom-in}
-.cz .shotbox.mid{margin-top:230px}
+.cz .shotbox.mid{margin-top:110px}
 body.read .cz .shotbox.mid{margin-top:0}
 .hl{position:absolute;border:3px solid var(--blue);border-radius:9px;background:rgba(100,181,255,.08);
   box-shadow:0 0 0 5px rgba(100,181,255,.22);pointer-events:none}
@@ -636,7 +636,11 @@ body.read .stack[style],body.read .stack{gap:18px}
     <div class="head r">
       <div><div class="eyebrow">How it is configured</div><h3>One column per approval step</h3></div>
       <div class="legend">
-        <div><b>1</b>New: the decision rule for several approvers. Left blank, everything stays as before</div>
+        <div><b>1</b>Per step: how several approvers reach one result</div>
+        <div><b>V</b>Veto &ndash; the first rejection ends the step</div>
+        <div><b>E</b>First decision counts &ndash; the others are closed</div>
+        <div><b>M</b>Majority decides &ndash; a tie counts as No</div>
+        <div><b>&ndash;</b>Left blank: everyone decides, as before</div>
       </div>
     </div>
     <div class="shotbox mid r">
