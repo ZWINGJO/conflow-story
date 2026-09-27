@@ -625,6 +625,59 @@ body.read .stack[style],body.read .stack{gap:18px}
     </div>
   </section>
 
+  <section class="slide" data-title="Input at the work item">
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">Input at the work item</div>
+        <h2 class="r">The approver adds<br>what only they know</h2>
+        <p class="lead r">A price, a purchasing group, a supplier: fields per step, taken straight from the maintenance dialog. <b>No app per workflow, no screen to build.</b> The same fields in SAP GUI and Fiori, saved while typing, every change logged.</p>
+      </div>
+      <div class="stack r" style="gap:20px">
+        <figure class="pic"><img src="screenshots/felder/fiori-felder.png" alt="Input fields at a work item in the Fiori My Inbox"><span class="tag">Fiori My Inbox</span></figure>
+        <figure class="pic" style="max-width:58%"><img src="screenshots/felder/gui-felder.png" alt="The same fields in SAP GUI"><span class="tag">SAP GUI</span></figure>
+        <div class="hint" style="margin-top:0">click to enlarge</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Lists, currency and checks">
+    <div class="cols">
+      <div class="stack">
+        <div class="eyebrow r">Input at the work item</div>
+        <h2 class="r">The dictionary<br>does the thinking</h2>
+        <p class="lead r">An amount shows the currency of the document. A purchasing group becomes a value list. A supplier is checked against the master data. <b>A mandatory field blocks the decision &ndash; in every channel.</b></p>
+      </div>
+      <div class="stack r" style="gap:20px">
+        <figure class="pic"><img src="screenshots/felder/fiori-liste-offen.png" alt="The purchasing group as a value list from the check table"><span class="tag">Value list from the check table</span></figure>
+        <figure class="pic"><img src="screenshots/felder/fiori-lieferant-ungueltig.png" alt="An unknown supplier is rejected"><span class="tag" style="left:auto;right:12px;bottom:auto;top:8px">Checked at once</span></figure>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <figure class="pic" style="flex:1"><img src="screenshots/felder/fiori-pflichtfeld.png" alt="Deciding without a mandatory value is refused in Fiori"><span class="tag">Fiori</span></figure>
+          <figure class="pic" style="flex:1.7"><img src="screenshots/felder/gui-pflichtfeld.png" alt="The same check in SAP GUI"><span class="tag">SAP GUI</span></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide cz" data-title="Fields, configured">
+    <div class="head r">
+      <div><div class="eyebrow">How it is configured</div><h3>One row per field</h3></div>
+      <div class="legend">
+        <div><b>1</b>The data element &ndash; type, label and value list come with it</div>
+        <div><b>2</b>Reference field: the currency of an amount</div>
+        <div><b>3</b>Input or display, mandatory or not</div>
+        <div><b>4</b>The documentation, right beside the view</div>
+      </div>
+    </div>
+    <div class="shotbox r" style="max-width:1160px;margin:0 auto">
+      <img src="screenshots/felder/cust-c14-felder.png" alt="Maintenance dialog: fields of a field set">
+      <span class="hl" data-n="1" style="left:40.3%;top:22.5%;width:7.6%;height:18.6%"></span>
+      <span class="hl" data-n="2" style="left:48%;top:32.5%;width:6.3%;height:2.8%"></span>
+      <span class="hl" data-n="3" style="left:54.4%;top:22.5%;width:23.2%;height:18.6%"></span>
+      <span class="hl" data-n="4" style="left:82.8%;top:10.5%;width:16.4%;height:87.5%"></span>
+    </div>
+  </section>
+
+
   <!-- Entscheidungsregel -->
   <section class="slide" data-title="Several approvers">
     <div class="cols">
@@ -668,7 +721,7 @@ body.read .stack[style],body.read .stack{gap:18px}
   <section class="slide" data-title="The email" style="padding-top:80px">
     <div class="eyebrow r">The email</div>
     <h2 class="r">The email says what the work item says</h2>
-    <p class="lead r" style="max-width:62ch">Every field from the template is available as a placeholder, and amounts and dates are properly formatted. If required, the email is sent in the recipient&rsquo;s language, and the preview in the maintenance dialog shows how it will look.</p>
+    <p class="lead r" style="max-width:62ch">Every field from the template is available as a placeholder &ndash; and so is every value entered at the work item &ndash; with amounts and dates properly formatted. If required, the email is sent in the recipient&rsquo;s language, and the preview in the maintenance dialog shows how it will look.</p>
     <figure class="pic r" style="margin-top:36px"><img src="screenshots/mail-steuerung.png" alt="Mail control with preview in the maintenance dialog"><span class="tag">Mail control with preview</span></figure>
     <button class="doku r" type="button" data-img="doku-c07.png" data-cap="Documentation in the maintenance dialog &middot; Mail control" style="margin-top:24px"><i></i>How the documentation puts it</button>
   </section>
@@ -801,7 +854,7 @@ body.read .stack[style],body.read .stack{gap:18px}
       <div class="stack">
         <div class="eyebrow r">Deciding</div>
         <h2 class="r">Result and note,<br>captured where the decision is made</h2>
-        <p class="lead r">No second transaction, no separate attachment. The reviewer picks a result and types a note, which is saved while typing.</p>
+        <p class="lead r">No second transaction, no separate attachment. The reviewer picks a result and types a note, which is saved while typing. <b>Today the panel is a field set: a few rows in the maintenance dialog.</b></p>
         <p class="on-in r">The same panel and the same data are available in SAP GUI. Every change is logged with user, time and channel.</p>
       </div>
     </div>
@@ -1040,15 +1093,15 @@ body.read .stack[style],body.read .stack{gap:18px}
       <div class="ratio r" aria-hidden="true" style="margin-top:56px">
         <div class="bar"><i class="cust"></i><i class="badi"></i></div>
         <div class="legend2">
-          <span><b class="c"></b>Configuration: steps, agents, four eyes, rules, deadlines, colours, mandatory comment, emails, the Fiori app, the log</span>
+          <span><b class="c"></b>Configuration: steps, agents, four eyes, rules, deadlines, colours, comments, input fields, emails, Fiori, the log</span>
           <span><b class="b"></b>Code</span>
         </div>
       </div>
       <div class="pillars r" style="grid-template-columns:1fr 1fr;margin-top:56px">
-        <div class="card"><div class="who">Developed for this case</div><b>The input panel</b><span>Result and note in the work item, plus a check that blocks approval without a result &ndash; or without a note when the result is critical. One class, used by SAP GUI, Fiori and any API call alike.</span></div>
+        <div class="card"><div class="who">Built as code for this case &ndash; now configuration</div><b>The input panel</b><span>Result and note in the work item, plus a check that blocks approval without a result. First a class written for this case; today a field set &ndash; a few rows in the maintenance dialog, the check included. Only a rule that depends on another field (a note only when the result is critical) still belongs in a field exit.</span></div>
         <div class="card"><div class="who">Developed for this case</div><b>The write-back</b><span>One background step that writes the result to the business partner. Fifteen lines of business logic; the rest is robust error handling.</span></div>
       </div>
-      <p class="on-in r" style="margin-top:34px">Both are small, self-contained classes &ndash; <b>exactly the kind of exception the BAdI is there for.</b></p>
+      <p class="on-in r" style="margin-top:34px">What is left is small and self-contained &ndash; <b>exactly the kind of exception the BAdI is there for.</b></p>
     </div>
   </section>
 
